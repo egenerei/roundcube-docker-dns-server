@@ -1,0 +1,6 @@
+FROM ubuntu:latest
+RUN apt update && apt install -y bind9
+COPY dns_config/named.conf /etc/bind/
+COPY dns_config/zones /etc/bind/zones
+EXPOSE 53/udp 53/tcp
+CMD ["named", "-g"]

@@ -1,0 +1,24 @@
+$TTL 86400
+@   IN  SOA ns1.izv.ies. root.izv.ies. (
+        2024021101  ; Serial (update this when making changes)
+        3600        ; Refresh (1 hour)
+        1800        ; Retry (30 minutes)
+        604800      ; Expire (7 days)
+        86400 )     ; Minimum TTL (1 day)
+
+; Name Server Records
+@       IN  NS  ns1.izv.ies.
+izv.ies.    IN  NS  ns1.izv.ies.  ; Explicit NS record
+
+; A Records (Hosts)
+izv.ies.    IN  A   192.168.2.100
+ns1         IN  A   192.168.2.100
+mail        IN  A   192.168.2.101
+
+; CNAME (Aliases)
+smtp        IN  CNAME   mail.izv.ies.
+pop         IN  CNAME   mail.izv.ies.
+imap        IN  CNAME   mail.izv.ies.
+
+; MX (Mail Exchange)
+@       IN  MX 10 mail.izv.ies.

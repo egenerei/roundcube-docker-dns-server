@@ -1,0 +1,44 @@
+services:
+  dns:
+    build: ./dns
+    container_name: dns_server
+    restart: always    
+    ports:
+      - "53:53/udp"
+      - "53:53/tcp"
+    networks:
+      mail_net:
+        ipv4_address: 192.168.2.100
+
+  mailserver:
+    image: marooou/postfix-roundcube
+    container_name: mailserver
+    depends_on:
+      - dns
+    environment:
+      - ADMIN_USERNAME=root
+      - ADMIN_PASSWD=password
+      - DOMAIN_NAME=izv.ies
+      - USERS=user1:pass11,user2:pass22
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+      - ./data/vmail/:/var/vmail
+      - ./data/log:/var/log
+    ports:
+      - "25:25"
+      - "80:80"
+      - "110:110"
+      - "143:143"
+      - "465:465"
+      - "993:993"
+      - "995:995"
+    restart: always
+    networks:
+      mail_net:
+        ipv4_address: 192.168.2.101
+networks:
+  mail_net:
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.2.0/24
